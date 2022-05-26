@@ -9,6 +9,11 @@ Python >= 3.10
 pip install -r requirements.txt
 ```
 
+# Run
+```
+python main.py
+```
+
 # TODO
 1. Set repeat times and eat apple.
 2. friend point summon
