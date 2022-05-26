@@ -5,7 +5,9 @@ Auto farming python code for F/GO on nox emulator.
 Python >= 3.10
 
 # Install
+'''
 pip install -r requirements.txt
+'''
 
 # TODO
 1. Set repeat times and eat apple.
