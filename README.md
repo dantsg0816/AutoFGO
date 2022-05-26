@@ -7,7 +7,7 @@ Python >= 3.10
 # Install
 pip install -r requirements.txt
 
-#TODO
+# TODO
 1. Set repeat times and eat apple.
 2. friend point summon
 3. open lottery box
