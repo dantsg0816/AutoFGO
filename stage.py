@@ -59,6 +59,7 @@ import select_card
 
 attack_img = cv2.imread('images/assets/attack.jpg')
 end_img = cv2.imread('images/assets/end.jpg')
+next_img = cv2.imread('images/assets/next.jpg')
 
 battle1 = cv2.imread('images/assets/battle1.jpg')
 battle2 = cv2.imread('images/assets/battle2.jpg')
@@ -123,24 +124,46 @@ class Stage:
         print('stage start')
 
         adbkit.wait_until(attack_img, 1300, 700, 1550, 800)
-        #self.__use_skill(2, 3, 1)
-        #self.__use_skill(3, 3, 1)
-        #self.__use_skill(2, 2, 1)
-        #self.__use_skill(3, 2, 1)
-        #self.__use_skill(2, 1)
-        #self.__use_skill(3, 1)
+
+        self.__battle([[9, 1], [8, 1], [7, 0], [6, 1], [5, 1], [1, 0]], [], [1], 1, 'b')
+        print('end battle1')
+        self.__battle([[4, 0]], [[3, 1]], [1], 2, 'b')
+        print('end battle2')
+        self.__battle([[2, 0], [3, 0]], [], [1], 3, 'b')
+        print('end battle3')
+        self.__end_stage()
+        
+
+
+    def __battle(self, skill_list, master_list, np_list, battle_num, mode):
         while True:
+            for skill, target in skill_list:
+                self.__use_skill(skill, target)
+
+            for skill, target in master_list:
+                self.__use_master_skill(skill, target)
+
             adbkit.tap(1475, 750)
-            time.sleep(3)
+            time.sleep(2)
             self.hand.check_cardtype()
             self.hand.detail()
-            res = self.__attack([1, 2, 3], self.hand.get_cardlist(), 1)
-            if res == 'next':
-                print('next')
+            res = self.__attack(np_list, self.hand.get_cardlist(mode), battle_num)
+            if res != 'cont':
                 break
-            if res == 'end':
-                print('end')
+
+    def __end_stage(self):
+        while True:
+            adbkit.tap(800, 800)
+            time.sleep(1)
+            adbkit.tap(800, 800)
+            time.sleep(1)
+            adbkit.tap(800, 800)
+            time.sleep(1)
+        
+            if adbkit.check_exist(next_img, 1300, 800, 170, 100):
+                adbkit.tap(1380, 850)
                 break
+
 
     def __attack(self, np_list, card_list, battle_num):
         for np in np_list:
@@ -150,26 +173,31 @@ class Stage:
         time.sleep(5)
         return self.__wait_result(battle_num)
 
-    def __use_skill(self, servant_num, skill_num, target=0):
-        adbkit.tap(servant_num * 397 + skill_num * 110 - 414, 725)
+    def __use_skill(self, skill_num, target):
+        servant = (skill_num-1)//3+1
+        skill = skill_num-servant*3+3
+        adbkit.tap(servant * 397 + skill * 110 - 414, 725)
+        if target > 0:
+            time.sleep(1)
+            adbkit.tap(target * 400 + 10, 540)
+        #adbkit.wait_until(attack_img, 1300, 700, 1550, 800)
+        time.sleep(4)
+
+    def __use_master_skill(self, skill_num, target):
+        adbkit.tap(1495, 390)
         time.sleep(1)
-        if target > 0:
-            adbkit.tap(target * 400 + 10, 540)
-        adbkit.wait_until(attack_img, 1300, 700, 1550, 800)
-
-    def __use_master_skill(self, skill_num, target=0):
-        adbkit.tap(1495, 390)
-        adbkit.tap(skill_num * 110 + 1026, 390)
-        if target > 0:
-            adbkit.tap(target * 400 + 10, 540)
-        adbkit.wait_until(attack_img, 1300, 700, 1550, 800)
-
-    def __use_master_change(self, src, dst):
-        adbkit.tap(1495, 390)
-        adbkit.tap(1356, 390)
-        adbkit.tap(src * 250 - 75, 430)
-        adbkit.tap(dst * 250 - 75, 430)
-        adbkit.tap(800, 780)
+        if skill_num > 10: #change
+            src = skill_num - 10
+            adbkit.tap(1356, 390)
+            adbkit.tap(src * 250 - 75, 430)
+            time.sleep(1)
+            adbkit.tap(target * 250 - 75, 430)
+            adbkit.tap(800, 780)
+        else:
+            adbkit.tap(skill_num * 110 + 1026, 390)
+            if target > 0:
+                time.sleep(1)
+                adbkit.tap(target * 400 + 10, 540)
         adbkit.wait_until(attack_img, 1300, 700, 1550, 800)
 
     def __wait_result(self, battle_num):
