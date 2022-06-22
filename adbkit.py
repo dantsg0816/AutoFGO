@@ -26,10 +26,14 @@ def check_exist(img, x, y, w, h, threshold=0.8, screenshot=None):
 
 def tap(x, y):
     subprocess.Popen(f"adb shell input tap {x} {y}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(0.2)
+    time.sleep(0.5)
 
 def screeshot():
     pipe = subprocess.Popen("adb shell screencap -p", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    #out, err = pipe.communicate()
+    #print(out)
+    #print(err)
     image_bytes = pipe.stdout.read().replace(b'\r\n', b'\n')
+    #print(image_bytes)
     image = cv2.imdecode(np.fromstring(image_bytes, np.uint8), cv2.IMREAD_COLOR)
     return image

@@ -84,7 +84,7 @@ class Hand:
                 if len(self.bw + self.b + self.br) > 2:
                     return self.bw + self.b + self.br
                 else:
-                    return self.bw + self.rw + self.gw + self.b + self.r + self.g + self.br + self.rr + self.gr
+                    return self.bw + self.b + self.br + self.rw + self.gw + self.r + self.g + self.rr + self.gr
             case 'w':
                 return  self.rw + self.bw + self.gw + self.r + self.b + self.g + self.rr + self.br + self.gr
             case _:
