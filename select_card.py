@@ -87,6 +87,8 @@ class Hand:
                     return self.bw + self.b + self.br + self.rw + self.gw + self.r + self.g + self.rr + self.gr
             case 'w':
                 return  self.rw + self.bw + self.gw + self.r + self.b + self.g + self.rr + self.br + self.gr
+            case 'bw':
+                return  self.bw + self.gw + self.rw + self.b + self.g + self.r + self.br + self.gr + self.rr
             case _:
                 if len(self.bw + self.b + self.br) > 2:
                     return self.bw + self.b + self.br

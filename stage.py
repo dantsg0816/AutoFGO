@@ -60,7 +60,8 @@ import select_card
 attack_img = cv2.imread('images/assets/attack.jpg')
 end_img = cv2.imread('images/assets/end.jpg')
 next_img = cv2.imread('images/assets/next.jpg')
-support_img = cv2.imread('images/assets/support.jpg')
+support_list = cv2.imread('images/assets/support.jpg')
+support_name = cv2.imread('images/assets/support_name.jpg')
 
 battle1 = cv2.imread('images/assets/battle1.jpg')
 battle2 = cv2.imread('images/assets/battle2.jpg')
@@ -103,10 +104,12 @@ class Stage:
         # ce2 60 658 265 715
         while True:
             print('select support')
-            #region 1
-            adbkit.tap(600, 350) # support_pos1
-            time.sleep(2)
-            if not adbkit.check_exist(support_img, 920, 115, 190, 95):
+            #if adbkit.check_exist(support_name, 440, 345, 290, 45):
+            #adbkit.tap(600, 350) # support_pos1
+            #adbkit.tap(600, 600) # support_pos2
+            adbkit.tap(600, 800) # support_pos3
+            time.sleep(3)
+            if not adbkit.check_exist(support_list, 920, 115, 200, 90):
                 time.sleep(5)
                 break
             adbkit.tap(1065, 160) # refresh
@@ -115,7 +118,7 @@ class Stage:
             time.sleep(5)
             
     def run(self):
-        self.support_class = 'mix'
+        self.support_class = 'caster'
         self.servant = ''
         self.craftessence = ''
         self.party_num = 3
@@ -126,20 +129,23 @@ class Stage:
             
             adbkit.wait_until(attack_img, 1300, 700, 1550, 800)
             time.sleep(1)
-            self.__battle([[9, 1], [8, 1], [7, 0], [6, 1], [5, 1], [4, 0], [1, 0]], [1], 1, 'b')
+            self.__battle([], [], 1, 'bw')        
             print('end battle1')
-            self.__battle([[12, 1]], [1], 2, 'b')
+            self.__battle([[9, 1], [8, 1], [7, 0], [6, 0], [3, 0], [1, 0]], [1], 2, 'bw', 3)
             print('end battle2')
-            self.__battle([[3, 0], [2, 0]], [1, 2, 3], 3, 'b')
+            self.__battle([[5, 0], [4, 1], [2, 0], [12, 1]], [1], 3, 'bw')
             print('end battle3')
+            
             self.__end_stage()
             print('stage end')
             self.__next_stage()
             self.__select_support()
 
 
-    def __battle(self, skill_list, np_list, battle_num, mode):
-
+    def __battle(self, skill_list, np_list, battle_num, mode, target=0):
+        if target > 0:
+            p = 3 - target
+            adbkit.tap(200+300*p, 55)
         for skill, target in skill_list:
             if skill > 10:
                 self.__use_master_skill(skill, target)
@@ -158,12 +164,12 @@ class Stage:
         time.sleep(1)
         adbkit.tap(412, 768)
         time.sleep(0.5)
-        adbkit.tap(1050, 700)
+        adbkit.tap(1150, 700)
         time.sleep(0.5)
-        adbkit.tap(800, 400)
+        adbkit.tap(800, 600) #gold 400, silver 600
         time.sleep(0.5)
         adbkit.tap(1050, 700)
-        time.sleep(10)
+        time.sleep(8)
 
     def __end_stage(self):
         while True:
@@ -172,6 +178,10 @@ class Stage:
             adbkit.tap(800, 800)
             time.sleep(1)
             if adbkit.check_exist(next_img, 1200, 750, 370, 110):
+                adbkit.tap(1380, 850)
+                time.sleep(1)
+                adbkit.tap(1380, 850)
+                time.sleep(1)
                 adbkit.tap(1380, 850)
                 break
 
@@ -194,13 +204,14 @@ class Stage:
         time.sleep(4)
 
     def __use_master_skill(self, skill_num, target):
+        time.sleep(2)
         adbkit.tap(1495, 390)
         time.sleep(1)
         skill_num -= 10
         if skill_num > 10: #change
             src = skill_num - 10
             adbkit.tap(1356, 390)
-            time.sleep(0.5)
+            time.sleep(3)
             adbkit.tap(src * 250 - 75, 430)
             time.sleep(0.5)
             adbkit.tap(target * 250 - 75, 430)
