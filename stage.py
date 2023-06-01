@@ -69,7 +69,7 @@ battle3 = cv2.imread('images/assets/battle3.jpg')
 
 class Stage:
     def __init__(self):
-        self.support_class = 'mix'
+        self.support_class = 'assassin'
         self.servant = ''
         self.craftessence = ''
         self.party_num = 3
@@ -78,8 +78,8 @@ class Stage:
 
     def __select_stage(self):
         adbkit.tap(1000, 300) #enter first stage
-        time.sleep(4)
-        self.__select_class()
+        time.sleep(6)
+        #self.__select_class()
         time.sleep(1)
         self.__select_support()
         time.sleep(1)
@@ -91,6 +91,8 @@ class Stage:
         match self.support_class:
             case 'caster':
                 adbkit.tap(540, 160)
+            case 'assassin':
+                adbkit.tap(625, 160)
             case 'mix':
                 adbkit.tap(880, 160)
             case _:
@@ -105,20 +107,20 @@ class Stage:
         while True:
             print('select support')
             #if adbkit.check_exist(support_name, 440, 345, 290, 45):
-            #adbkit.tap(600, 350) # support_pos1
+            adbkit.tap(600, 350) # support_pos1
             #adbkit.tap(600, 600) # support_pos2
-            adbkit.tap(600, 800) # support_pos3
+            #adbkit.tap(600, 800) # support_pos3
             time.sleep(3)
             if not adbkit.check_exist(support_list, 920, 115, 200, 90):
                 time.sleep(5)
                 break
             adbkit.tap(1065, 160) # refresh
-            time.sleep(0.5)
+            time.sleep(1)
             adbkit.tap(1050, 700) # refresh_ok
-            time.sleep(5)
+            time.sleep(10)
             
     def run(self):
-        self.support_class = 'caster'
+        self.support_class = 'mix'
         self.servant = ''
         self.craftessence = ''
         self.party_num = 3
@@ -129,11 +131,11 @@ class Stage:
             
             adbkit.wait_until(attack_img, 1300, 700, 1550, 800)
             time.sleep(1)
-            self.__battle([], [], 1, 'bw')        
+            self.__battle([[2, 2], [4, 0], [5, 2], [6, 0], [7, 2], [8, 2]], [], 1, 'r')        
             print('end battle1')
-            self.__battle([[9, 1], [8, 1], [7, 0], [6, 0], [3, 0], [1, 0]], [1], 2, 'bw', 3)
+            self.__battle([[3, 2], [9, 2]], [2], 2, 'r')
             print('end battle2')
-            self.__battle([[5, 0], [4, 1], [2, 0], [12, 1]], [1], 3, 'bw')
+            self.__battle([[1, 2], [4, 0], [5, 2]], [2], 3, 'r')
             print('end battle3')
             
             self.__end_stage()
@@ -166,7 +168,7 @@ class Stage:
         time.sleep(0.5)
         adbkit.tap(1150, 700)
         time.sleep(0.5)
-        adbkit.tap(800, 600) #gold 400, silver 600
+        adbkit.tap(800, 400) #gold 400, silver 600 bronze 709
         time.sleep(0.5)
         adbkit.tap(1050, 700)
         time.sleep(8)
