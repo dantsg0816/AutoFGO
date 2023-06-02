@@ -78,14 +78,13 @@ class Hand:
                     print('error')
                     exit()
 
-    def get_cardlist(self, mode=''):
-        match mode:
+    def get_cardlist(self, card_rule=''):
+        match card_rule:
+            case 'r':
+                return self.rw + self.r + self.rr + self.bw + self.b + self.br + self.g + self.rr + self.gr
             case 'b':
-                if len(self.bw + self.b + self.br) > 2:
-                    return self.bw + self.b + self.br
-                else:
-                    return self.bw + self.b + self.br + self.rw + self.gw + self.r + self.g + self.rr + self.gr
-            case 'w':
+                return self.bw + self.b + self.br + self.rw + self.gw + self.r + self.g + self.rr + self.gr
+            case 'rw':
                 return  self.rw + self.bw + self.gw + self.r + self.b + self.g + self.rr + self.br + self.gr
             case 'bw':
                 return  self.bw + self.gw + self.rw + self.b + self.g + self.r + self.br + self.gr + self.rr
